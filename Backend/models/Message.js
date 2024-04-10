@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const messageSchema = new mongoose.Schema(
   {
     sender: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId, // so it will take the mongoose  id which was made when user was created
       ref: "User",
       required: true,
     },
@@ -17,9 +17,8 @@ const messageSchema = new mongoose.Schema(
       required: true,
     },
     chatRoom: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId, // This will take that mongoose id which is attach with the chatroom was made
       ref: "ChatRoom",
-      required: true,
     },
   },
   { timestamps: true }

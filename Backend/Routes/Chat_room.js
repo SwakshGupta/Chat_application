@@ -7,13 +7,10 @@ const {
   getChatRoomById,
 } = require("../controllers/ChatRoom");
 
-// Create a new chat room
-router.post("/", createChatRoom);
+router.post("/add", createChatRoom);
 
-// Get all chat rooms
-router.get("/", getAllChatRooms);
+router.get("/getall", getAllChatRooms);
 
-// Get a single chat room by ID
 router.get("/:roomId", getChatRoomById);
 
 module.exports = router;

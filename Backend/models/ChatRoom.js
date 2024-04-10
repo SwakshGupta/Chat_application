@@ -8,7 +8,7 @@ const chatRoomSchema = new mongoose.Schema(
     },
     participants: [
       {
-        type: mongoose.Schema.Types.ObjectId, // An array refering to the user model  it represents the participants who are participating in the room
+        type: mongoose.Schema.Types.ObjectId, // an array and their mongoose id will be taken from the user model
         ref: "User",
       },
     ],

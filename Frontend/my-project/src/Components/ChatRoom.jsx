@@ -6,7 +6,7 @@ const ChatRoom = () => {
 
   useEffect(() => {
     axios
-      .get("/api/chatrooms")
+      .get("http://localhost:8002/api/chatRoom/getall")
       .then((response) => {
         setChatRooms(response.data);
       })

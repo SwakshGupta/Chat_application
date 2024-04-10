@@ -4,15 +4,20 @@ const {
   registerUser,
   loginUser,
   getUserProfile,
+  deleteUser,
+  getAllUsers,
 } = require("../controllers/User");
 
-// User registration route
-router.post("/register", registerUser);
+// All routes
 
-// User login route
+router.post("/add", registerUser);
+
 router.post("/login", loginUser);
 
-// User profile route
-router.get("/:userId", getUserProfile);
+router.get("/get/:id", getUserProfile);
+
+router.post("/delete/:id", deleteUser);
+
+router.get("/getall", getAllUsers);
 
 module.exports = router;

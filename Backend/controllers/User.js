@@ -1,4 +1,4 @@
-const User = require("../models/user.model");
+const User = require("../models/user");
 
 exports.registerUser = async (req, res) => {
   try {
@@ -22,11 +22,82 @@ exports.registerUser = async (req, res) => {
 };
 
 exports.loginUser = async (req, res) => {
-  // Implement user login logic
-  res.send("User login endpoint");
+  try {
+    const { email, password } = req.body;
+
+    // Check if the user exists
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Check if the password is correct
+    const isPasswordValid = await user.comparePassword(password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: "Invalid password" });
+    }
+
+    // Return user data or token for authentication
+    res.status(200).json({ message: "User login successful", user });
+  } catch (error) {
+    console.error("Error logging in user:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 };
 
 exports.getUserProfile = async (req, res) => {
-  // Implement logic to retrieve user profile by ID
-  res.send("Get user profile endpoint");
+  try {
+    // Implement logic to retrieve user profile by ID
+    const userId = req.params.userId;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res
+      .status(200)
+      .json({ message: "User profile retrieved successfully", user });
+  } catch (error) {
+    console.error("Error retrieving user profile:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+exports.deleteUser = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    // Check if the user exists
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Delete the user
+    await User.findByIdAndDelete(userId);
+
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+exports.getAllUsers = async (req, res) => {
+  try {
+    // Retrieve all users from the database
+    const users = await User.find();
+
+    // Check if there are no users found
+    if (!users || users.length === 0) {
+      return res.status(404).json({ message: "No users found" });
+    }
+
+    // Return the list of users
+    res.status(200).json({ message: "Users retrieved successfully", users });
+  } catch (error) {
+    console.error("Error retrieving users:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 };

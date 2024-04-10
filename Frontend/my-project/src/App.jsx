@@ -1,12 +1,12 @@
 import React from "react";
-import MessageSection from "./Components/MessageSection";
-import ChatRoom from "./Components/ChatRoom";
+import Navbar from "./Components/Navbar";
+import Sidebar from "./Components/SIdebar";
 
 const App = () => {
   return (
     <div>
-      <MessageSection />
-      <ChatRoom />
+      <Navbar />
+      <Sidebar />
     </div>
   );
 };
