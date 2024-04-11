@@ -10,8 +10,9 @@ const Sidebar = ({ onSelectUser }) => {
     axios
       .get("http://localhost:8002/api/user/getall")
       .then((response) => {
-        setUsers(response.data);
+        setUsers(response.data.users);
         setLoading(false);
+        console.log(response.data);
       })
       .catch((error) => {
         console.error("Error fetching users:", error);

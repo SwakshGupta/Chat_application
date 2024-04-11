@@ -7,6 +7,7 @@ const Navbar = () => {
         <h1 className="text-xl font-bold">Chat App</h1>
       </div>
       <div className="flex items-center space-x-4">
+        {/* Search Bar */}
         <div className="relative">
           <input
             type="text"
@@ -17,37 +18,44 @@ const Navbar = () => {
             🔍
           </span>
         </div>
-        <button className="text-gray-300 hover:text-white">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15 19l-7-7 7-7"
-            />
-          </svg>
-        </button>
-        <button className="text-gray-300 hover:text-white">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M9 5l7 7-7 7"
-            />
-          </svg>
+        {/* Chat Room Button with Dropdown */}
+        <div className="relative">
+          <button className="text-gray-300 hover:text-white">
+            Chat Rooms
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6 inline-block ml-1"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </button>
+          {/* Dropdown Content */}
+          <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 hidden">
+            <ul className="py-1">
+              <li>
+                <button className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-200 w-full">
+                  Chat Room 1
+                </button>
+              </li>
+              <li>
+                <button className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-200 w-full">
+                  Chat Room 2
+                </button>
+              </li>
+              {/* Add more chat rooms as needed */}
+            </ul>
+          </div>
+        </div>
+        <button className="text-gray-300 hover:text-white hidden sm:block">
+          Logout
         </button>
       </div>
     </nav>
