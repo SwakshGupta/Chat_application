@@ -1,16 +1,19 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+// Sidebar.js
 
-const Sidebar = ({ onSelectUser }) => {
-  const [users, setUsers] = useState([]);
+import React, { useState, useEffect, useContext } from "react";
+import axios from "axios";
+import { ChatContext } from "../context/chat";
+
+const Sidebar = () => {
+  const { room, setRoom, setSelectedRoom } = useContext(ChatContext); // Include setSelectedRoom from the context
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     axios
-      .get("http://localhost:8002/api/user/getall")
+      .get("http://localhost:8002/api/chatRoom/getall")
       .then((response) => {
-        setUsers(response.data.users);
+        setRoom(response.data);
         setLoading(false);
         console.log(response.data);
       })
@@ -21,28 +24,54 @@ const Sidebar = ({ onSelectUser }) => {
       });
   }, []);
 
+  const handleAddChatRoom = () => {
+    axios
+      .post("http://localhost:8002/api/chatRoom/add", {
+        // Provide necessary data for adding a chat room, if required
+      })
+      .then((response) => {
+        // Handle successful addition of chat room
+        console.log("Chat room added successfully:", response.data);
+        setRoom([...room, response.data]);
+      })
+      .catch((error) => {
+        // Handle error while adding chat room
+        console.error("Error adding chat room:", error);
+        // Display error message if needed
+      });
+  };
+
+  const handleRoomClick = (selectedRoom) => {
+    // Update selected room state when a room is clicked and we will use this top display in on our message page
+    setSelectedRoom(selectedRoom);
+    console.log(selectedRoom);
+  };
+
   return (
     <div className="sidebar bg-gray-200 w-64 p-4">
-      <h2 className="text-lg font-bold mb-4">Users</h2>
+      <div className="flex justify-between mb-4">
+        <h2 className="text-lg font-bold">ChatRooms</h2>
+        <button
+          onClick={handleAddChatRoom}
+          className="px-2 py-1 bg-gray-300 text-gray-700 rounded-md shadow-md hover:bg-gray-400"
+        >
+          Add Rooms +
+        </button>
+      </div>
       {loading ? (
         <p>Loading...</p>
       ) : error ? (
         <p>{error}</p>
       ) : (
         <ul className="space-y-2">
-          {Array.isArray(users) &&
-            users.map((user) => (
+          {Array.isArray(room) &&
+            room.map((room) => (
               <li
-                key={user._id}
+                key={room._id}
                 className="cursor-pointer bg-white p-2 rounded-md shadow-md hover:bg-gray-100 flex items-center"
-                onClick={() => onSelectUser(user)}
+                onClick={() => handleRoomClick(room)} // Call handleRoomClick when a room is clicked
               >
-                <img
-                  src={`http://localhost:8002/uploads/${user.profilePicture}`}
-                  alt={user.name}
-                  className="w-8 h-8 rounded-full mr-2"
-                />
-                <span>{user.username}</span>
+                <span>{room.name}</span>
               </li>
             ))}
         </ul>

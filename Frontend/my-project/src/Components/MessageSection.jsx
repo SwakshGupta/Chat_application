@@ -1,11 +1,34 @@
-import React from "react";
+import React, { useContext } from "react";
+import { ChatContext } from "../context/chat";
 
 const MessageSection = () => {
+  const {
+    selectedRoom,
+    participantsVisible,
+    setParticipantsVisible,
+  } = useContext(ChatContext); // extracting all the stuff from the context api
+
+  const toggleParticipantsVisibility = () => {
+    setParticipantsVisible(!participantsVisible);
+  };
+
   return (
     <div className="flex-none w-3/4 bg-gray-100 p-4">
       <div className="h-full flex flex-col justify-between">
         <h2 className="text-lg font-bold mb-4">Message Section</h2>
-        {/* Your message section content goes here */}
+        {selectedRoom ? (
+          <div
+            className="mb-4 bg-gray-200 py-2 rounded-md text-center cursor-pointer"
+            onClick={toggleParticipantsVisibility}
+          >
+            <h3 className="text-xl font-semibold">{selectedRoom.name}</h3>
+            {participantsVisible && (
+              <Participants participants={selectedRoom.participants} />
+            )}
+          </div>
+        ) : (
+          <p className="text-gray-500">No room selected</p>
+        )}
         <div className="h-full flex flex-col justify-end">
           {/* Add your message list or conversation display here */}
         </div>
