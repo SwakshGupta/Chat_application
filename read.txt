@@ -2,11 +2,11 @@
 
  1. The user will login with his emmail and password 
  
- 2. For each user we will have different chat rooms which will have different users now our user can select a perticular chat room 
+ 2. when the user is logged in he can make different chat room by seleting the number of users in it  
 
- 3. after selecting a perticular chat room  number of user in that chat room will render on the screen with their conversation as well
+ 3. when the room is slected it is displayed on the top of message bar user can also see number of users in that chat room 
 
- 4. Inside the chat room the user become the sender and reciever  when he send the message then that message will be visible to all the user 
+ 4. After this we have implemnted the socket.io library for real time chat 
 
  
 

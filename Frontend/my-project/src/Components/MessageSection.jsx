@@ -1,13 +1,36 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ChatContext } from "../context/chat";
+import io from "socket.io-client";
+import Participants from "./participants";
+
+const socket = io.connect("http://localhost:8002"); // Connect to the Socket.IO server
 
 const MessageSection = () => {
-  const {
-    selectedRoom,
-    participantsVisible,
-    setParticipantsVisible,
-  } = useContext(ChatContext); // extracting all the stuff from the context api
+  const { selectedRoom, participantsVisible, setParticipantsVisible } =
+    useContext(ChatContext);
+  const [message, setMessage] = useState(""); // State to store the message
+  const [messageReceived, setMessageReceived] = useState(""); // State to store received messages
 
+  // Function to send a message to the server
+  const sendMessage = () => {
+    if (message.trim() !== "") {
+      socket.emit("send_message", { message, room: selectedRoom.name });
+      setMessage(""); // Clear the input field after sending the message
+    }
+  };
+
+  // Effect to listen for incoming messages from the server
+  useEffect(() => {
+    socket.on("received_message", (data) => {
+      setMessageReceived(data.message); // Update state with received message
+    });
+
+    return () => {
+      socket.off("received_message"); // Clean up event listener
+    };
+  }, []); // Empty dependency array means this effect runs only once after the initial render
+
+  // Function to toggle visibility of participants
   const toggleParticipantsVisibility = () => {
     setParticipantsVisible(!participantsVisible);
   };
@@ -31,15 +54,21 @@ const MessageSection = () => {
         )}
         <div className="h-full flex flex-col justify-end">
           {/* Add your message list or conversation display here */}
+          <p>{messageReceived}</p> {/* Display received message */}
         </div>
         {/* Message input field and send button */}
         <div className="p-2 bg-white rounded-md shadow-md flex items-center">
           <input
             type="text"
             placeholder="Type your message..."
+            value={message} // Bind input value to state
+            onChange={(e) => setMessage(e.target.value)} // Update state on change
             className="flex-grow px-4 py-2 rounded-l-md border border-gray-300 focus:outline-none focus:border-blue-500"
           />
-          <button className="bg-blue-500 text-white py-2 px-4 rounded-r-md hover:bg-blue-600 focus:outline-none">
+          <button
+            onClick={sendMessage}
+            className="bg-blue-500 text-white py-2 px-4 rounded-r-md hover:bg-blue-600 focus:outline-none"
+          >
             Send
           </button>
         </div>
